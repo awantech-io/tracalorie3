@@ -50,6 +50,20 @@ const ItemCtrl = (function(){
            return newItem; 
 
         },
+        
+        getTotalCalories: function(){
+            let total = 0;
+
+            // loop tru item and add cals
+            data.items.forEach( function(item){
+                total += item.calories;
+            });
+
+            // set total cal in data structure
+            data.totalCalories = total;
+
+            return data.totalCalories;
+        },
 
         logData: function(){
             return data;
@@ -68,7 +82,8 @@ const UICtrl = (function(){
         itemList: '#item-list',
         addBtn: '.add-btn',
         itemNameInput: '#item-name',
-        itemCaloriesInput: '#item-calories'
+        itemCaloriesInput: '#item-calories',
+        totalCalories:'.total-calories'
     } 
 
     // public methods
@@ -133,6 +148,12 @@ const UICtrl = (function(){
             document.querySelector(UISelectors.itemList).style.display = 'none';
         },
 
+        // show total cal ui
+        showTotalCalories: function(totalCalories){
+            document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
+
+        },
+
         // return UISelectors to public
         getSelectors: function(){
         return UISelectors;
@@ -172,6 +193,12 @@ const App = ( function(){
             // add item to UI list
             UICtrl.addListItem(newItem);
 
+            // get total calories
+            const totalCalories = ItemCtrl.getTotalCalories();
+
+            // add total cal to ui
+            UICtrl.showTotalCalories(totalCalories);
+
             // clear field
             UICtrl.clearInput();
 
@@ -194,8 +221,11 @@ const App = ( function(){
                 UICtrl.populateItemList(items);
             }
 
-            // put the data into UICtrl()
-            //UICtrl.populateItemList(items);
+             // get total calories
+             const totalCalories = ItemCtrl.getTotalCalories();
+
+             // add total cal to ui
+             UICtrl.showTotalCalories(totalCalories);
             
             // load event listener
             loadEventListeners();
