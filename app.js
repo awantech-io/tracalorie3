@@ -4,7 +4,7 @@
 const ItemCtrl = (function(){
    
     // item constructor
-    const Item = function(id, name, calories) {
+    const Items = function(id, name, calories) {
         this.id = id;
         this.name = name;
         this.calories = calories;
@@ -12,7 +12,7 @@ const ItemCtrl = (function(){
 
     // data structure / state
     const data = {
-        item:[
+        items:[
             {id:0, name:'steak', calories:1200},
             {id:1, name:'ice cream', calories:200},
             {id:2, name:'egg', calories:100}
@@ -23,6 +23,11 @@ const ItemCtrl = (function(){
 
     // public methods
     return {
+
+        getItems: function(){
+            return data.items;
+        },
+
         logData: function(){
             return data;
         }
@@ -38,6 +43,25 @@ const UICtrl = (function(){
     // public methods
     return {
 
+        // Display ui for items    
+        populateItemList: function(items) {
+            let html = '';
+
+            items.forEach( function(item){
+                html += `<li id="item-${item.id}" 
+                class="collection-item">
+                <strong>${item.name}</strong> 
+                <em>${item.calories}</em>
+                <a href="#" class="secondary-content">
+                    <i class="edit-item fa fa-pencil"></i>
+                </a>
+            </li>`;
+            })
+
+            // insert list items
+            document.querySelector('#item-list').innerHTML = html;
+        }
+
     }
 
 })();
@@ -50,7 +74,13 @@ const App = ( function(){
     // public method
     return {
         init: function(){
-            console.log('initalizee app...');
+        
+            // fetch the data from ItemCtrl()
+            const items = ItemCtrl.getItems();
+
+            // put the data into UICtrl()
+            UICtrl.populateItemList(items);
+            
         }
     }
     
