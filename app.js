@@ -13,9 +13,9 @@ const ItemCtrl = (function(){
     // data structure / state
     const data = {
         items:[
-            {id:0, name:'steak', calories:1200},
-            {id:1, name:'ice cream', calories:200},
-            {id:2, name:'egg', calories:100}
+            // {id:0, name:'steak', calories:1200},
+            // {id:1, name:'ice cream', calories:200},
+            // {id:2, name:'egg', calories:100}
         ],
         currentItem: null,
         totalCalories:0
@@ -103,6 +103,8 @@ const UICtrl = (function(){
 
         // add new item to UI List
         addListItem: function(item){
+            // show the list
+            document.querySelector(UISelectors.itemList).style.display = 'block';
             // create li element
             const li = document.createElement('li');
             // Add class
@@ -125,6 +127,10 @@ const UICtrl = (function(){
         clearInput: function() {
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
+        },
+
+        hideList: function() {
+            document.querySelector(UISelectors.itemList).style.display = 'none';
         },
 
         // return UISelectors to public
@@ -180,9 +186,17 @@ const App = ( function(){
             // fetch the data from ItemCtrl()
             const items = ItemCtrl.getItems();
 
+            // check if any items
+            if (items.length === 0){
+                UICtrl.hideList();
+            } else {
+                // put the data into UICtrl()
+                UICtrl.populateItemList(items);
+            }
+
             // put the data into UICtrl()
-            UICtrl.populateItemList(items);
-           
+            //UICtrl.populateItemList(items);
+            
             // load event listener
             loadEventListeners();
         }
