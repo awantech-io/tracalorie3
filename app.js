@@ -101,6 +101,32 @@ const UICtrl = (function(){
             }
         }, 
 
+        // add new item to UI List
+        addListItem: function(item){
+            // create li element
+            const li = document.createElement('li');
+            // Add class
+            li.className = 'collection-item';
+            // Add id
+            li.id = `item-${item.id}`;
+            // Add HTML
+            li.innerHTML = `<strong>${item.name}</strong> 
+            <em>${item.calories}</em>
+            <a href="#" class="secondary-content">
+                <i class="edit-item fa fa-pencil"></i>
+            </a>`;
+            // insert item
+            document.querySelector(UISelectors.itemList).insertAdjacentElement('beforeend',li)
+
+
+        },
+
+        // clear input
+        clearInput: function() {
+            document.querySelector(UISelectors.itemNameInput).value = '';
+            document.querySelector(UISelectors.itemCaloriesInput).value = '';
+        },
+
         // return UISelectors to public
         getSelectors: function(){
         return UISelectors;
@@ -136,6 +162,12 @@ const App = ( function(){
         if ( input.name !== '' && input.calories !== ''){
             // add item 
             const newItem = ItemCtrl.addItem( input.name, input.calories);
+
+            // add item to UI list
+            UICtrl.addListItem(newItem);
+
+            // clear field
+            UICtrl.clearInput();
 
         }
 
