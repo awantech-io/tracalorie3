@@ -33,7 +33,35 @@ const StorageCtrl = (function(){
                 items = JSON.parse(localStorage.getItem('items'));
             }
             return items;
-        } 
+        },
+        
+        updateItemStorage: function(updatedItem){   
+            let items = JSON.parse(localStorage.getItem('items'));
+
+            items.forEach(function(item, index){
+                if(updatedItem.id === item.id){
+                    items.splice(index, 1, updatedItem);
+                }
+            });
+
+            localStorage.setItem('items', JSON.stringify(items));
+        },
+
+        deleteItemFromStorage: function(id){
+            let items = JSON.parse(localStorage.getItem('items'));
+
+            items.forEach(function(item, index){
+                if(id === item.id){
+                    items.splice(index, 1);
+                }
+            });
+
+            localStorage.setItem('items', JSON.stringify(items));
+        },
+
+        clearItemsFromStorage:function(){
+            localStorage.removeItem('items');
+        }
    } 
 })();
 
@@ -448,6 +476,9 @@ const App = ( function( ItemCtrl, StorageCtrl, UICtrl ){
         // add total cal to ui
         UICtrl.showTotalCalories(totalCalories);
 
+        // update local storage
+        StorageCtrl.updateItemStorage(updatedItem);
+
         UICtrl.clearInput();
 
         e.preventDefault();
@@ -472,6 +503,9 @@ const App = ( function( ItemCtrl, StorageCtrl, UICtrl ){
         // add total cal to ui
         UICtrl.showTotalCalories(totalCalories);
 
+         // delete from local storage
+        StorageCtrl.deleteItemFromStorage(currentItem.id);
+
         UICtrl.clearInput();
         
         e.preventDefault();
@@ -490,6 +524,9 @@ const App = ( function( ItemCtrl, StorageCtrl, UICtrl ){
 
         // clear all item from Ui
         UICtrl.removeItems();
+
+        // clear from local storage
+        StorageCtrl.clearItemsFromStorage();
 
         // Hide the UL
         UICtrl.hideList();
